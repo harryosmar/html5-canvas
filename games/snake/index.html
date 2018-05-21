@@ -5,6 +5,7 @@
     s=w=h=10;
     ys=xs=0;
     fx=fy=null;
+    trails = [];
 
     window.onload = function () {
         canvas = document.getElementById('container');
@@ -40,17 +41,33 @@
             x = 0;
         }
 
+        trails.unshift({'x' : x, 'y' : y});
+
         if (checkIfEatTheFood()) {
-            drawFood(true);
-            console.log('nyum.. nyum')
+            if (xs > 0) { // current flow to the right
+                trails.push({'x' : x - (trails.length * w), 'y' : y});
+            } else if (xs < 0) { // current flow to the left
+                trails.push({'x' : x + (trails.length * w), 'y' : y});
+            } else if (ys > 0) { // current flow to the bottom
+                trails.push({'x' : x, 'y' : y - (trails.length * h)});
+            } else if (ys < 0) { // current flow to the top
+                trails.push({'x' : x, 'y' : y + (trails.length * h)});
+            }
         }
 
         ctx.fillStyle = 'green';
-        ctx.fillRect(x, y, w, h);
+
+        for (var i in trails) {
+            ctx.fillRect(trails[i].x, trails[i].y, w, h);
+        }
+
+        trails.pop();
     }
 
     function checkIfEatTheFood() {
         if (x === fx && y === fy) {
+            drawFood(true);
+            console.log('nyum.. nyum');
             return true;
         }
 

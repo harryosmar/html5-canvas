@@ -1,0 +1,67 @@
+<canvas id="container" width="300" height="300"></canvas>
+<script>
+
+    x=y=150;
+    s=w=h=10;
+    ys=xs=0;
+
+    window.onload = function () {
+        canvas = document.getElementById('container');
+        ctx = canvas.getContext('2d');
+        window.setInterval(game, 100);
+
+        window.addEventListener('keydown', move);
+    };
+    
+    function game() {
+        ctx.fillStyle = 'black';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+
+        x = x + xs;
+        y = y + ys;
+
+        if (y < 0) {
+            y = canvas.height;
+        } else if (y > canvas.height) {
+            y = 0;
+        }
+
+        if (x < 0) {
+            x = canvas.width;
+        } else if (x > canvas.width) {
+            x = 0;
+        }
+
+        ctx.fillStyle = 'green';
+        ctx.fillRect(x, y, w, h);
+
+
+//        ctx.fillStyle = 'red';
+//        ctx.fillRect(Math.floor(Math.random() * canvas.width), Math.floor(Math.random() * canvas.height), w, h);
+    }
+
+    function move(e) {
+        switch (e.keyCode) {
+            case 38: //up
+                xs = 0;
+                ys = -1 * s;
+                break;
+            case 40: //down
+                xs = 0;
+                ys = s;
+                break;
+            case 37: //left
+                ys = 0;
+                xs = -1 * s;
+                break;
+            case 39: //right
+                ys = 0;
+                xs = s;
+                break;
+            case 32: //right
+                xs=ys = 0;
+                break;
+        }
+    }
+</script>

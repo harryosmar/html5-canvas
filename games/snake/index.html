@@ -4,42 +4,72 @@
     x=y=150;
     s=w=h=10;
     ys=xs=0;
+    fx=fy=null;
 
     window.onload = function () {
         canvas = document.getElementById('container');
         ctx = canvas.getContext('2d');
         window.setInterval(game, 100);
-
         window.addEventListener('keydown', move);
     };
     
     function game() {
+        drawCanvas();
+        drawSnake();
+        drawFood();
+    }
+
+    function drawCanvas() {
         ctx.fillStyle = 'black';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
 
-
+    function drawSnake() {
         x = x + xs;
         y = y + ys;
 
-        if (y < 0) {
+        if (y < 0) { // hit the upper wall
             y = canvas.height;
-        } else if (y > canvas.height) {
+        } else if (y > canvas.height) { // hit the bottom wall
             y = 0;
         }
 
-        if (x < 0) {
+        if (x < 0) { // hit the lef wall
             x = canvas.width;
-        } else if (x > canvas.width) {
+        } else if (x > canvas.width) { // hit the right wall
             x = 0;
+        }
+
+        if (checkIfEatTheFood()) {
+            drawFood(true);
+            console.log('nyum.. nyum')
         }
 
         ctx.fillStyle = 'green';
         ctx.fillRect(x, y, w, h);
-
-
-//        ctx.fillStyle = 'red';
-//        ctx.fillRect(Math.floor(Math.random() * canvas.width), Math.floor(Math.random() * canvas.height), w, h);
     }
+
+    function checkIfEatTheFood() {
+        if (x === fx && y === fy) {
+            return true;
+        }
+
+        return false;
+    }
+
+    function drawFood(doRandom) {
+        doRandom = typeof doRandom === 'undefined' ? false : doRandom;
+
+        ctx.fillStyle = 'red';
+        if (doRandom || fx === null) {
+            fx = Math.floor(Math.floor(Math.random() * canvas.width) / s) * s;
+        }
+        if (doRandom || fy === null) {
+            fy = Math.floor(Math.floor(Math.random() * canvas.height) / s) * s;
+        }
+        ctx.fillRect(fx, fy, w, h);
+    }
+
 
     function move(e) {
         switch (e.keyCode) {

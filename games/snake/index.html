@@ -1,3 +1,4 @@
+<h4>Score : <span id="score"></span></h4>
 <canvas id="container" width="300" height="300"></canvas>
 <script>
 
@@ -6,11 +7,14 @@
     ys=xs=0;
     fx=fy=null;
     trails = [];
+    score=0;
+
 
     window.onload = function () {
         canvas = document.getElementById('container');
+        scoreLabel = document.getElementById("score");
         ctx = canvas.getContext('2d');
-        window.setInterval(game, 100);
+        interval = window.setInterval(game, 100);
         window.addEventListener('keydown', move);
     };
     
@@ -58,16 +62,42 @@
         ctx.fillStyle = 'green';
 
         for (var i in trails) {
+            isHitTrail(i);
+
             ctx.fillRect(trails[i].x, trails[i].y, w, h);
         }
 
         trails.pop();
     }
 
+    function isHitTrail(i) {
+        if (trails.length > 1 && i > 0 && trails[i].x === x && trails[i].y === y) {
+            clearInterval(interval);
+            ctx.fillStyle = 'red';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.beginPath();
+            ctx.arc(75, 75, 50, 0, Math.PI * 2, true); // Outer circle
+            ctx.moveTo(110, 75);
+            ctx.arc(75, 75, 35, 0, Math.PI, false);  // Mouth (clockwise)
+            ctx.moveTo(65, 65);
+            ctx.arc(60, 65, 5, 0, Math.PI * 2, true);  // Left eye
+            ctx.moveTo(95, 65);
+            ctx.arc(90, 65, 5, 0, Math.PI * 2, true);  // Right eye
+            ctx.stroke();
+
+            return true;
+        }
+
+        return false;
+    }
+
     function checkIfEatTheFood() {
+        scoreLabel.innerHTML = score;
+
         if (x === fx && y === fy) {
             drawFood(true);
-            console.log('nyum.. nyum');
+            score++;
             return true;
         }
 

@@ -14,8 +14,10 @@
         canvas = document.getElementById('container');
         scoreLabel = document.getElementById("score");
         ctx = canvas.getContext('2d');
-        interval = window.setInterval(game, 100);
-        window.addEventListener('keydown', move);
+
+
+        interval = window.setInterval(game, 100); // start animation
+        window.addEventListener('keydown', move); // handle event keyboard pressed
     };
     
     function game() {
@@ -45,17 +47,23 @@
             x = 0;
         }
 
+        /**
+         * head
+         */
         trails.unshift({'x' : x, 'y' : y});
 
+        /**
+         * add new tail tail if snake eat the food
+         */
         if (checkIfEatTheFood()) {
             if (xs > 0) { // current flow to the right
-                trails.push({'x' : x - (trails.length * w), 'y' : y});
+                trails.push({'x' : x - (trails.length * w), 'y' : y}); // add new tail to the left
             } else if (xs < 0) { // current flow to the left
-                trails.push({'x' : x + (trails.length * w), 'y' : y});
+                trails.push({'x' : x + (trails.length * w), 'y' : y}); // add new tail to the right
             } else if (ys > 0) { // current flow to the bottom
-                trails.push({'x' : x, 'y' : y - (trails.length * h)});
+                trails.push({'x' : x, 'y' : y - (trails.length * h)}); // add new tail to the top
             } else if (ys < 0) { // current flow to the top
-                trails.push({'x' : x, 'y' : y + (trails.length * h)});
+                trails.push({'x' : x, 'y' : y + (trails.length * h)}); // add new tail to the bottom
             }
         }
 
@@ -63,7 +71,6 @@
 
         for (var i in trails) {
             isHitTrail(i);
-
             ctx.fillRect(trails[i].x, trails[i].y, w, h);
         }
 
@@ -71,8 +78,15 @@
     }
 
     function isHitTrail(i) {
-        if (trails.length > 1 && i > 0 && trails[i].x === x && trails[i].y === y) {
+        if (trails.length > 1 // snake length greater than 1
+            && i > 0 // is not the head it self
+            && trails[i].x === x && trails[i].y === y // position trail equal to the head
+        ) {
+            /**
+             * end animation
+             */
             clearInterval(interval);
+
             ctx.fillStyle = 'red';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -113,7 +127,7 @@
 
         ctx.fillStyle = 'red';
         if (doRandom || fx === null) {
-            fx = Math.floor(Math.floor(Math.random() * canvas.width) / s) * s;
+            fx = Math.floor(Math.floor(Math.random() * canvas.width) / s) * s; // random position mod s must be equal to 0
         }
         if (doRandom || fy === null) {
             fy = Math.floor(Math.floor(Math.random() * canvas.height) / s) * s;
@@ -140,7 +154,7 @@
                 ys = 0;
                 xs = xs !== 0 ? xs : s;
                 break;
-            case 32: //right
+            case 32: //space
                 xs=ys = 0;
                 break;
         }

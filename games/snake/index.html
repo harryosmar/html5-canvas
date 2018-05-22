@@ -47,9 +47,7 @@
             x = 0;
         }
 
-        /**
-         * head
-         */
+        // add new head position
         trails.unshift({'x' : x, 'y' : y});
 
         /**
@@ -70,14 +68,15 @@
         ctx.fillStyle = 'green';
 
         for (var i in trails) {
-            isHitTrail(i);
+            isHitTail(i);
             ctx.fillRect(trails[i].x, trails[i].y, w, h);
         }
 
+        // remove the last tail
         trails.pop();
     }
 
-    function isHitTrail(i) {
+    function isHitTail(i) {
         if (trails.length > 1 // snake length greater than 1
             && i > 0 // is not the head it self
             && trails[i].x === x && trails[i].y === y // position trail equal to the head

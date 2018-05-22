@@ -30,18 +30,18 @@
     }
 
     function drawSnake() {
-        x = x + xs;
-        y = y + ys;
+        x += xs;
+        y += ys;
 
         if (y < 0) { // hit the upper wall
-            y = canvas.height;
-        } else if (y > canvas.height) { // hit the bottom wall
+            y = canvas.height - h;
+        } else if (y >= canvas.height) { // hit the bottom wall
             y = 0;
         }
 
         if (x < 0) { // hit the lef wall
-            x = canvas.width;
-        } else if (x > canvas.width) { // hit the right wall
+            x = canvas.width - w;
+        } else if (x >= canvas.width) { // hit the right wall
             x = 0;
         }
 
@@ -76,20 +76,24 @@
             ctx.fillStyle = 'red';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            ctx.beginPath();
-            ctx.arc(75, 75, 50, 0, Math.PI * 2, true); // Outer circle
-            ctx.moveTo(110, 75);
-            ctx.arc(75, 75, 35, 0, Math.PI, false);  // Mouth (clockwise)
-            ctx.moveTo(65, 65);
-            ctx.arc(60, 65, 5, 0, Math.PI * 2, true);  // Left eye
-            ctx.moveTo(95, 65);
-            ctx.arc(90, 65, 5, 0, Math.PI * 2, true);  // Right eye
-            ctx.stroke();
+            drawsmileEndGame();
 
             return true;
         }
 
         return false;
+    }
+
+    function drawsmileEndGame() {
+        ctx.beginPath();
+        ctx.arc(75, 75, 50, 0, Math.PI * 2, true); // Outer circle
+        ctx.moveTo(110, 75);
+        ctx.arc(75, 75, 35, 0, Math.PI, false);  // Mouth (clockwise)
+        ctx.moveTo(65, 65);
+        ctx.arc(60, 65, 5, 0, Math.PI * 2, true);  // Left eye
+        ctx.moveTo(95, 65);
+        ctx.arc(90, 65, 5, 0, Math.PI * 2, true);  // Right eye
+        ctx.stroke();
     }
 
     function checkIfEatTheFood() {
